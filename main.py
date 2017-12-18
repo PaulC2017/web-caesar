@@ -1,68 +1,75 @@
-from flask import Flask,request
+from flask import Flask, request
 from caesar import rotate_string
+
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-form = """ 
-<!doctype html>
+form = """
+
+<!DOCTYPE html>
+
 <html>
     <head>
         <style>
-            form (
-                 background-color:#eee;
-                 padding:20px;
-                 margin: 0 auto;
-                 width:540px;
-                 font: 16px sans-serif;
-                 border-radius: 10px;
-           }
-             textarea {
-                 margin: 10px 0;
-                 width: 540px;
-                 height: 120px;
+            form {
+                background-color:#eee;
+                padding: 20px;
+                margin: 0 auto;
+                width: 540px;
+                font: 16px sans-serif;
+                border-radius: 10px;
             }
-
+            textarea {
+                margin: 10px 0;
+                width: 540px;
+                height: 120px;   
+            }
+       
         </style>
+    
     </head>
-    <body>
 
-
-     <form action="/"method="post">
-     <div>
-        <label for="rotate"> Rotate by: </label>
-            
-            <input type="text" id="rotate" name="rot" value="0"/>
-           
-        
-    </div>
-    <br>
     
-        <textarea   type="text" name="text">
+    <body>  
 
-        </textarea>
+    <form action="/" method="post">
+        <label for="new-rotate">
+            Rotate by
+            <input type="text" value = "0" id="new-rotate" name="rot"/>
+         </label>
+        <input type="submit" value="Submit"/>
         <br>
-        <input type="submit" value="Submit Query"/>
+    </form>
+    <form action= "/" method="post" >
+    <textarea rows="4" cols="50" name="text">   </textarea>
+
     
-    </body
-    
+       
+
+
+
+    </body>
 </html>
 
 """
-    
-    
-        
 
 
-@app.route("/")
+@app.route("/" , methods=["post"])
+def encrypt():
+    the_text = request.form.get("text")
+    the_text=str(the_text)
+    the_rot = request.form.get("rot")
+    the_rot = int(the_rot)
+    encrypt = rotate_string(the_text,the_rot)
+    result = "<h1>" + encrypt + "</h1>"
+    return result
+
+
+
+@app.route("/" )
 def index():
-    return form
+    return form 
 
 
-
-@app.route("/" methods=[POST}])
-def encrypt(numRot,textToRot):
-    num_rot = numRot
-    text_to_rot = textToRot
-    return "<h1>" + rotate_string(text_to_rot,num_rot) + "</h1>"
 
 app.run()
